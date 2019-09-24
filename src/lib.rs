@@ -27,7 +27,7 @@
 //! fn main() -> Result<(), ParseIntError> {
 //!     let num: i32 = "not a number".parse()?; // will fail and print an error
 //!     // ...
-//! #    Ok(())
+//! #     Ok(())
 //! }
 //! ```
 //!

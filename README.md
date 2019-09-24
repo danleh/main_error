@@ -12,5 +12,5 @@ fn main() -> Result<(), MainError> {
 
 For more info, see: 
 - [Package information](https://crates.io/crates/main_error) on crates.io
-- [Documentation](https://docs.rs/main_error)  on Docs.rs
+- [Documentation](https://docs.rs/main_error/)  on Docs.rs
 - [More examples](https://github.com/danleh/main_error/tree/master/examples)  in the repo

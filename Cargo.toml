@@ -8,8 +8,8 @@ keywords = ["error", "main", "print", "Debug", "Display"]
 categories = ["command-line-interface"]
 
 repository = "https://github.com/danleh/main_error"
-documentation = "https://docs.rs/main_error/"
-readme = "README"
+documentation = "https://docs.rs/main_error"
+readme = "README.md"
 license = "MIT"
 
 edition = "2018"

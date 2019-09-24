@@ -2,10 +2,17 @@
 name = "main_error"
 version = "0.1.0"
 authors = ["Daniel Lehmann <mail@dlehmann.eu>"]
-edition = "2018"
 
 description = "Print errors with Display instead of Debug when using ? in main()."
 keywords = ["error", "main", "print", "Debug", "Display"]
 categories = ["command-line-interface"]
 
-[dependencies]
+repository = "https://github.com/danleh/main_error"
+documentation = "https://docs.rs/main_error/"
+readme = "README"
+license = "MIT"
+
+edition = "2018"
+
+[badges]
+travis-ci = { repository = "danleh/main_error" }

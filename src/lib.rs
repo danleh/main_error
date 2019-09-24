@@ -3,9 +3,21 @@
 
 //! Print errors with [`Display`] instead of [`Debug`] when using `?` in `main()`.
 //!
-//! Use like `fn main() -> Result<(), MainError>`. See below for more details.
+//! # TL;DR
 //!
-//! # The Problem
+//! Use like:
+//! 
+//! ```should_panic
+//! use main_error::MainError;
+//!
+//! fn main() -> Result<(), MainError> {
+//!     Err("string or a custom error type")?
+//! }
+//! ```
+//!
+//! See below for more details.
+//!
+//! # Problem
 //!
 //! Since [Rust 1.26](https://blog.rust-lang.org/2018/05/10/Rust-1.26.html#main-can-return-a-result), `main` can return a [`Result<T, E>`](core::result).
 //! This enables the use of `?` for convenient error handling ([RFC](https://github.com/rust-lang/rfcs/pull/1937)). For example:
@@ -26,7 +38,7 @@
 //! Error: ParseIntError { kind: InvalidDigit }
 //! ```
 //!
-//! # The Solution
+//! # Solution
 //!
 //! This crate provides [`MainError`] as a drop-in replacement for the error type `E` in your `main`'s `Result<T, E>`.
 //! It prints the error via [`Display`] instead of [`Debug`], which yields a nicer error message.
@@ -64,7 +76,7 @@
 //!        If [`MainError`] impl's `Error`, it would mean [`MainError`] could be converted from itself.
 //!        This collides with the [reflexive `impl<T> From<T> for T` in core](https://doc.rust-lang.org/nightly/src/core/convert.rs.html#445-449).
 //! - [`MainError`] implements [`Debug`] in terms of [`Display`] of the underlying error.
-//!   This is hacky, but unfortunately, [`Debug`] as the output for the `main` error case is stable now.
+//!   This is hacky, but unfortunately [`Debug`] as the output for the `main` error case is stable now.
 //!   The `"Error: "` part at the beginning of the output comes [from the standard library](https://doc.rust-lang.org/src/std/process.rs.html#1621), thus it cannot be changed.
 
 use std::error::Error;

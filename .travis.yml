@@ -8,4 +8,4 @@ script:
   - cargo build --verbose
   - cargo test --verbose
   - cargo doc --verbose
-  - for i in examples/*; do cargo run --example $(basename $i .rs); done
+  - for i in examples/*; do cargo run --example $(basename $i .rs) || true; done

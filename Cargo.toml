@@ -13,6 +13,3 @@ readme = "README.md"
 license = "MIT"
 
 edition = "2018"
-
-[badges]
-travis-ci = { repository = "danleh/main_error" }

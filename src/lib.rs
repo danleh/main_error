@@ -11,7 +11,7 @@
 //! use main_error::MainError;
 //!
 //! fn main() -> Result<(), MainError> {
-//!     Err("string or a custom error type")?
+//!     Err("string or a custom error type")? // prints using Display, not Debug
 //! }
 //! ```
 //!

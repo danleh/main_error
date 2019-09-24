@@ -5,9 +5,7 @@ authors = ["Daniel Lehmann <mail@dlehmann.eu>"]
 edition = "2018"
 
 description = "Print errors with Display instead of Debug when using ? in main()."
-keywords = ["error", "main"]
+keywords = ["error", "main", "print", "Debug", "Display"]
 categories = ["command-line-interface"]
-
-publish = false
 
 [dependencies]

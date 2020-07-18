@@ -13,3 +13,4 @@ readme = "README.md"
 license = "MIT"
 
 edition = "2018"
+include = ["src/lib.rs", "LICENSE", "README.md"]

@@ -4,17 +4,17 @@
 //!
 //! Use by returning [`MainError`] as the error type from `main()`.
 //! Example:
-//! 
+//!
 //! ```should_panic
 //! use main_error::MainError;
-//! 
+//!
 //! fn main() -> Result<(), MainError> {
 //!     // This prints
 //!     //   "Error: invalid digit found in string"
 //!     // instead of (if you used `Result<(), Box<dyn Error>>` or similar)
 //!     //   "ParseIntError { kind: InvalidDigit }".
 //!     let number: i32 = "not a number".parse()?;
-//! 
+//!
 //!     Ok(())
 //! }
 //! ```
@@ -29,9 +29,9 @@
 //!
 //! Unfortunately, the error is printed via [`Debug`] ([hardcoded in the standard library](https://doc.rust-lang.org/src/std/process.rs.html), search for "Error:"),
 //! which gives not very pretty or human-friendly output.
-//! 
+//!
 //! For example, this program:
-//! 
+//!
 //! ```should_panic
 //! # use std::num::ParseIntError;
 //! fn main() -> Result<(), ParseIntError> {

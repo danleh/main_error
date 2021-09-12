@@ -1,4 +1,4 @@
-# main_error [![build status](https://travis-ci.com/danleh/main_error.svg?branch=master)](https://travis-ci.com/danleh/main_error)
+# main_error
 
 Print errors with `Display` instead of `Debug` when using `?` in `main()`. For example:
 
@@ -12,5 +12,5 @@ fn main() -> Result<(), MainError> {
 
 For more info, see: 
 - [Package information](https://crates.io/crates/main_error) on crates.io
-- [Documentation](https://docs.rs/main_error/)  on Docs.rs
-- [More examples](https://github.com/danleh/main_error/tree/master/examples)  in the repo
+- [Documentation](https://docs.rs/main_error/) on Docs.rs
+- [Usage examples](https://github.com/danleh/main_error/tree/master/examples) in the repo

@@ -1,13 +1,15 @@
-use main_error::MainError;
+use main_error::MainResult;
 use std::error::Error;
 use std::fmt;
 
-// Debug is required by Error trait.
-#[derive(Debug)]
-/// My custom error type; can also be a more complex struct or enum.
-struct MyError();
+// You can use custom types as the error type, if they implement `Debug` and `Display`.
 
-// The simplest Error impl: no implementation for source().
+// Debug is required by the Error trait; we can just derive it.
+#[derive(Debug)]
+/// A custom error type. Can also be a more complex struct or enum.
+struct MyError;
+
+// The simplest implementation of the Error trait: no source().
 impl Error for MyError {}
 
 // Display is also required by Error trait.
@@ -17,9 +19,9 @@ impl fmt::Display for MyError {
     }
 }
 
-fn main() -> Result<(), MainError> {
-    // NOTE the try-operator ? is necessary for implicitly converting to MainError.
-    Err(MyError())?;
+fn main() -> MainResult {
+    // NOTE: The try-operator `?` is necessary for implicit conversion to `MainError`.
+    Err(MyError)?;
 
     Ok(())
 }

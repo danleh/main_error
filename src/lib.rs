@@ -1,40 +1,49 @@
 #![deny(missing_docs)]
-#![doc(html_playground_url = "https://play.rust-lang.org/")]
 
 //! Print errors with [`Display`] instead of [`Debug`] when using `?` in `main()`.
 //!
-//! # TL;DR
-//!
-//! Use like:
+//! Use by returning [`MainError`] as the error type from `main()`.
+//! Example:
 //! 
 //! ```should_panic
 //! use main_error::MainError;
-//!
+//! 
 //! fn main() -> Result<(), MainError> {
-//!     Err("string or a custom error type")? // prints using Display, not Debug
+//!     // This prints
+//!     //   "Error: invalid digit found in string"
+//!     // instead of (if you used `Result<(), Box<dyn Error>>` or similar)
+//!     //   "ParseIntError { kind: InvalidDigit }".
+//!     let number: i32 = "not a number".parse()?;
+//! 
+//!     Ok(())
 //! }
 //! ```
 //!
+//! For convenience, you can also use the [`MainResult`] type.
 //! See below for more details.
 //!
-//! # Problem
+//! # The Issue
 //!
-//! Since [Rust 1.26](https://blog.rust-lang.org/2018/05/10/Rust-1.26.html#main-can-return-a-result), `main` can return a [`Result<T, E>`](core::result).
-//! This enables the use of `?` for convenient error handling ([RFC](https://github.com/rust-lang/rfcs/pull/1937)). For example:
+//! Since [Rust 1.26](https://blog.rust-lang.org/2018/05/10/Rust-1.26.html#main-can-return-a-result), `main()` function can return a [`Result<T, E>`](core::result).
+//! This enables the use of `?` for convenient error handling in small programs and quick examples ([RFC](https://github.com/rust-lang/rfcs/pull/1937)).
 //!
+//! Unfortunately, the error is printed via [`Debug`] ([hardcoded in the standard library](https://doc.rust-lang.org/src/std/process.rs.html), search for "Error:"),
+//! which gives not very pretty or human-friendly output.
+//! 
+//! For example, this program:
+//! 
 //! ```should_panic
 //! # use std::num::ParseIntError;
 //! fn main() -> Result<(), ParseIntError> {
-//!     let num: i32 = "not a number".parse()?; // will fail and print an error
+//!     let num: i32 = "not a number".parse()?;
 //!     // ...
 //! #     Ok(())
 //! }
 //! ```
 //!
-//! Unfortunately, the error is printed via [`Debug`] ([hardcoded in the standard library](https://doc.rust-lang.org/src/std/process.rs.html#1618-1624)), which gives not very pretty or human-friendly output.
-//! For example, the error above is printed as:
+//! will print
 //!
-//! ```output
+//! ```text
 //! Error: ParseIntError { kind: InvalidDigit }
 //! ```
 //!
@@ -67,17 +76,18 @@
 //! - [`MainError`] implements [`From`] for all types that can be converted into a `Box<dyn Error>`.
 //!     1. This allows it to be used in place of any type that implements the [`Error`] trait (see example above).
 //!     2. It can also be used in place of any type that can be _converted_ to a `Box<dyn Error>`, e.g., `String`.
-//! - [`MainError`] does not implement the [`Error`] trait itself.
-//!     1. It _doesn't have to_, because the standard library only requires `E: Debug` for `main() -> Result<T, E>`.
-//!     2. It _doesn't need to_, because the [`Error`] trait is mostly for interoperability between libraries, whereas [`MainError`] should only be used in `main`.
-//!     3. It simply _cannot_, because this would create an overlapping `impl`.
-//!        [`MainError`] can be converted from `Into<Box<dyn Error>>`.
-//!        `Into<Box<dyn Error>>` [is implemented](https://doc.rust-lang.org/src/std/error.rs.html#219) for `E: Error` itself.
-//!        If [`MainError`] impl's `Error`, it would mean [`MainError`] could be converted from itself.
-//!        This collides with the [reflexive `impl<T> From<T> for T` in core](https://doc.rust-lang.org/nightly/src/core/convert.rs.html#445-449).
+//! - [`MainError`] does not implement the [`Error`] trait itself. Reasons:
+//!     1. It's not necessary, because the standard library only requires `E: Debug` for `main() -> Result<T, E>`.
+//!     2. You should only be using `MainError` for `main()` anyway, whereas the `Error` trait is more for interoparability between libraries.
+//!     3. One simply _cannot_ implement `Error` for `MainError`, because this would create an overlapping `impl`.  
+//!        Explanation:  
+//!        - `MainError` can be converted from a `T: Into<Box<dyn Error>>`.
+//!        - `Into<Box<dyn Error>>` [is implemented](std::error::Error#implementors) for `E: Error` itself.
+//!        - If `MainError` would implement `Error`, it could be converted from itself.
+//!        - This collides with the [reflexive `impl<T> From<T> for T` in core](core::convert::From#generic-implementations).
 //! - [`MainError`] implements [`Debug`] in terms of [`Display`] of the underlying error.
 //!   This is hacky, but unfortunately [`Debug`] as the output for the `main` error case is stable now.
-//!   The `"Error: "` part at the beginning of the output comes [from the standard library](https://doc.rust-lang.org/src/std/process.rs.html#1621), thus it cannot be changed.
+//!   The `"Error: "` part at the beginning of the output comes [from the standard library](https://doc.rust-lang.org/src/std/process.rs.html), thus it cannot be changed.
 
 use std::error::Error;
 use std::fmt::{self, Debug, Display};

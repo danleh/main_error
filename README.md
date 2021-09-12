@@ -6,7 +6,13 @@ Print errors with `Display` instead of `Debug` when using `?` in `main()`. For e
 use main_error::MainError;
 
 fn main() -> Result<(), MainError> {
-    Err("string or a custom error type")? // prints using Display, not Debug
+    // This prints
+    //   "Error: invalid digit found in string"
+    // instead of (if you used `Result<(), Box<dyn Error>>` or similar)
+    //   "ParseIntError { kind: InvalidDigit }".
+    let number: i32 = "not a number".parse()?;
+
+    Ok(())
 }
 ```
 

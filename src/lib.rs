@@ -133,3 +133,6 @@ impl Debug for MainError {
         Ok(())
     }
 }
+
+/// Convenience type as a shorthand return type for `main()`.
+pub type MainResult = Result<(), MainError>;
